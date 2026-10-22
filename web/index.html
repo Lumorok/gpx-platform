@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPX Route Analytics</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <style>
+    :root { --ink:#1a2421; --line:#b7c4bd; --accent:#0f6b4c; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 1.25rem;
+      font-family: "Segoe UI", sans-serif; color: var(--ink);
+      background: linear-gradient(160deg, #dfe8e3, #eef2f0);
+      min-height: 100vh;
+    }
+    h1 { margin: 0 0 .35rem; font-size: 1.5rem; }
+    p { margin: 0 0 1rem; }
+    form { display: flex; gap: .75rem; align-items: center; margin-bottom: 1rem; }
+    button {
+      background: var(--accent); color: #fff; border: 0;
+      padding: .45rem .9rem; cursor: pointer;
+    }
+    #map { width: 100%; height: 70vh; border: 1px solid var(--line); }
+  </style>
+</head>
+<body>
+  <h1>GPX Route Analytics</h1>
+  <p>Укажи Route ID и отрисуй трек на MapLibre (не Leaflet).</p>
+  <form id="form">
+    <label for="routeId">Route ID</label>
+    <input id="routeId" type="number" min="1" value="1" required>
+    <button type="submit">Показать трек</button>
+  </form>
+  <div id="map"></div>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script>
+    const map = new maplibregl.Map({
+      container: "map",
+      style: {
+        version: 8,
+        sources: {
+          osm: {
+            type: "raster",
+            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tileSize: 256,
+            attribution: "© OpenStreetMap"
+          }
+        },
+        layers: [{ id: "osm", type: "raster", source: "osm" }]
+      },
+      center: [37.6, 55.75],
+      zoom: 10
+    });
+
+    document.getElementById("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("routeId").value;
+      // TODO: GET /routes/{id}/points → GeoJSON LineString → addSource/addLayer
+      console.warn("Дорисуй линию трека для route", id);
+    });
+  </script>
+</body>
+</html>
